@@ -12,22 +12,22 @@ function DayAccordion({ day }: { day: DayPlan }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden">
+    <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-800/30">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition"
+        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-slate-800/50 transition"
       >
         <div className="flex items-center gap-3">
-          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold">
+          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 text-blue-400 text-xs font-bold">
             {day.day}
           </span>
           <div>
-            <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{day.focus_area}</p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">{day.date} &middot; ~{day.estimated_hours}h</p>
+            <p className="text-sm font-medium text-white">{day.focus_area}</p>
+            <p className="text-xs text-slate-400">{day.date} &middot; ~{day.estimated_hours}h</p>
           </div>
         </div>
         <svg
-          className={`w-5 h-5 text-zinc-400 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`w-5 h-5 text-slate-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -36,14 +36,14 @@ function DayAccordion({ day }: { day: DayPlan }) {
         </svg>
       </button>
       {open && (
-        <div className="px-4 pb-4 space-y-3 border-t border-zinc-200 dark:border-zinc-700 pt-3">
+        <div className="px-4 pb-4 space-y-3 border-t border-slate-800 pt-3">
           <div>
-            <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">Topics</p>
+            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Topics</p>
             <div className="flex flex-wrap gap-1.5">
               {day.topics_to_cover.map((t, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs"
+                  className="px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-medium"
                 >
                   {t}
                 </span>
@@ -51,11 +51,11 @@ function DayAccordion({ day }: { day: DayPlan }) {
             </div>
           </div>
           <div>
-            <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">Activities</p>
-            <ul className="space-y-1">
+            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Activities</p>
+            <ul className="space-y-1.5">
               {day.activities.map((a, i) => (
-                <li key={i} className="text-sm text-zinc-700 dark:text-zinc-300 flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" />
+                <li key={i} className="text-sm text-slate-300 flex items-start gap-2.5">
+                  <span className="mt-2 h-1 w-1 rounded-full bg-blue-400 shrink-0" />
                   {a}
                 </li>
               ))}
@@ -69,21 +69,21 @@ function DayAccordion({ day }: { day: DayPlan }) {
 
 export default function PlanCard({ plan, onDelete }: PlanCardProps) {
   return (
-    <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50 overflow-hidden shadow-sm">
-      <div className="p-5 border-b border-zinc-200 dark:border-zinc-700">
+    <div className="group rounded-2xl border border-slate-800 bg-[#161B26] overflow-hidden hover:border-slate-700 transition-all duration-300">
+      <div className="p-5 border-b border-slate-800">
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{plan.subject}</h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{plan.topics}</p>
+          <div className="min-w-0">
+            <h3 className="text-lg font-semibold text-white truncate">{plan.subject}</h3>
+            <p className="text-sm text-slate-400 mt-0.5 line-clamp-2">{plan.topics}</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium">
+            <span className="px-3 py-1 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-400 text-xs font-medium border border-blue-500/10">
               {plan.days_until_exam} days
             </span>
             {onDelete && (
               <button
                 onClick={onDelete}
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition"
                 title="Delete plan"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,23 +93,38 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
             )}
           </div>
         </div>
-        <div className="flex gap-4 mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-          <span>Exam: {plan.exam_date}</span>
-          <span>&middot;</span>
-          <span>{plan.hours_per_day}h/day</span>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-slate-400">
+          <span className="flex items-center gap-1.5">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Exam: {plan.exam_date}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {plan.hours_per_day}h/day
+          </span>
           {plan.schedule && (
-            <>
-              <span>&middot;</span>
-              <span>{plan.schedule.length} days planned</span>
-            </>
+            <span className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              {plan.schedule.length} days planned
+            </span>
           )}
         </div>
       </div>
       {plan.schedule && plan.schedule.length > 0 && (
         <div className="p-5 space-y-2">
-          <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-3">
-            Study Schedule
-          </p>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-blue-500/20 to-transparent" />
+            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+              Study Schedule
+            </p>
+            <div className="h-px flex-1 bg-gradient-to-l from-blue-500/20 to-transparent" />
+          </div>
           {plan.schedule.map((day) => (
             <DayAccordion key={day.day} day={day} />
           ))}

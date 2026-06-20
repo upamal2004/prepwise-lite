@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "PrepWise AI - Smart Study Planner",
@@ -24,23 +13,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
-        <header className="sticky top-0 z-50 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md">
+    <html lang="en" className="h-full antialiased">
+      <body className="min-h-full flex flex-col bg-[#0B0F17]">
+        <header className="sticky top-0 z-50 border-b border-slate-800 bg-[#161B26]">
           <nav className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-            <Link href="/" className="text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-              PrepWise <span className="text-blue-600 dark:text-blue-400">AI</span>
+            <Link href="/" className="text-lg font-bold tracking-tight">
+              <span className="text-white">PrepWise</span>{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                AI
+              </span>
             </Link>
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center gap-1 text-sm">
               <Link
                 href="/"
-                className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
+                className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition"
               >
                 Home
               </Link>
               <Link
                 href="/plans"
-                className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
+                className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition"
               >
                 My Plans
               </Link>
