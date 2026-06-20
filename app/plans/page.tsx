@@ -54,7 +54,7 @@ export default function PlansPage() {
           </div>
           <div className="h-px flex-1 bg-gradient-to-l from-blue-500/20 to-transparent" />
         </div>
-        <h1 className="text-3xl font-bold text-white text-center mt-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white text-center mt-4">
           Saved Study Plans
         </h1>
         <p className="text-slate-400 text-center mt-2 mb-10">
@@ -62,13 +62,13 @@ export default function PlansPage() {
         </p>
 
         {loading ? (
-          <div className="flex items-center justify-center py-24">
+          <div className="flex items-center justify-center py-16 sm:py-24">
             <div className="relative">
               <div className="w-10 h-10 rounded-full border-2 border-slate-800 border-t-blue-500 animate-spin" />
             </div>
           </div>
         ) : plans.length === 0 ? (
-          <div className="text-center py-24">
+          <div className="text-center py-16 sm:py-24">
             <div className="w-16 h-16 rounded-2xl bg-[#161B26] border border-slate-800 flex items-center justify-center mx-auto mb-5">
               <svg className="w-8 h-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

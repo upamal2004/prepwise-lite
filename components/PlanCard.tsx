@@ -73,16 +73,16 @@ function WeekBlock({ week, days }: { week: number; days: DayPlan[] }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-3 mb-1">
-        <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-400 text-xs font-bold">
+      <div className="flex items-center gap-2 sm:gap-3 mb-1">
+        <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-400 text-xs font-bold shrink-0">
           {week}
         </span>
-        <p className="text-sm font-semibold text-white">Week {week}</p>
-        <span className="text-xs text-slate-500">
+        <p className="text-sm font-semibold text-white shrink-0">Week {week}</p>
+        <span className="text-[11px] sm:text-xs text-slate-500 truncate min-w-0">
           {firstDate} — {lastDate}
         </span>
       </div>
-      <div className="space-y-2 pl-3 border-l border-slate-800/60">
+      <div className="space-y-2 pl-2 sm:pl-3 border-l border-slate-800/60">
         {days.map((day) => (
           <DayAccordion key={day.day} day={day} />
         ))}

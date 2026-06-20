@@ -60,12 +60,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0B0F17]">
       {/* ── Hero ── */}
-      <section className="relative max-w-6xl mx-auto px-4 pt-20 pb-14 text-center">
+      <section className="relative max-w-6xl mx-auto px-4 pt-16 sm:pt-20 pb-12 sm:pb-14 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-800 bg-[#161B26] text-xs font-medium text-slate-400 mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           AI-Powered Study Planning
         </div>
-        <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight">
           Smart Study Plans,
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
@@ -77,11 +77,11 @@ export default function Home() {
           generate a personalized day-by-day plan to help you prepare.
         </p>
 
-        <div className="mt-10 flex items-center justify-center gap-8 sm:gap-12">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-10">
           {features.map((item, i) => (
             <div key={i} className="flex items-center gap-2 text-slate-400">
               <span className="w-4 h-4 text-blue-400 shrink-0">{item.icon}</span>
-              <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{item.title}</span>
+              <span className="text-xs sm:text-sm font-medium">{item.title}</span>
             </div>
           ))}
         </div>
@@ -89,7 +89,7 @@ export default function Home() {
 
       {/* ── Create & Recent Plans ── */}
       <section className="relative max-w-6xl mx-auto px-4 pb-20">
-        <div className="flex flex-col lg:flex-row gap-10 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 sm:gap-10 items-start">
           <div className="w-full lg:w-1/2 lg:sticky lg:top-24">
             <div className="rounded-2xl border border-slate-800 bg-[#161B26] p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-7">
@@ -116,7 +116,7 @@ export default function Home() {
                 <PlanCard key={plan.id} plan={plan} />
               ))
             ) : (
-              <div className="rounded-2xl border border-dashed border-slate-800 bg-[#161B26]/50 p-14 text-center">
+              <div className="rounded-2xl border border-dashed border-slate-800 bg-[#161B26]/50 p-8 sm:p-14 text-center">
                 <div className="w-12 h-12 rounded-xl bg-slate-800/50 flex items-center justify-center mx-auto mb-4">
                   <svg className="w-6 h-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
