@@ -42,6 +42,21 @@ export default function PlansPage() {
     }
   };
 
+  const handleClearAll = async () => {
+    if (plans.length === 0) return;
+    const confirmed = window.confirm(
+      `Are you sure you want to delete all ${plans.length} study plans? This cannot be undone.`
+    );
+    if (!confirmed) return;
+    try {
+      const supabase = getSupabaseClient();
+      await supabase.from("plans").delete().not("id", "is", null);
+      setPlans([]);
+    } catch (err) {
+      console.error("Clear all error:", err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0F17]">
       <div className="relative max-w-4xl mx-auto px-4 py-14">
@@ -80,15 +95,28 @@ export default function PlansPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-5">
-            {plans.map((plan) => (
-              <PlanCard
-                key={plan.id}
-                plan={plan}
-                onDelete={plan.id ? () => handleDelete(plan.id!) : undefined}
-              />
-            ))}
-          </div>
+          <>
+            <div className="flex items-center justify-end mb-5">
+              <button
+                onClick={handleClearAll}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-900/40 text-red-400 text-xs font-medium hover:bg-red-500/10 hover:border-red-700/60 transition"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Clear All
+              </button>
+            </div>
+            <div className="space-y-5">
+              {plans.map((plan) => (
+                <PlanCard
+                  key={plan.id}
+                  plan={plan}
+                  onDelete={plan.id ? () => handleDelete(plan.id!) : undefined}
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>
