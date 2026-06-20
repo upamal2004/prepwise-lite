@@ -5,6 +5,7 @@ import type { StudyPlan, DayPlan } from "@/lib/types";
 
 interface PlanCardProps {
   plan: StudyPlan;
+  onDelete?: () => void;
 }
 
 function DayAccordion({ day }: { day: DayPlan }) {
@@ -66,7 +67,7 @@ function DayAccordion({ day }: { day: DayPlan }) {
   );
 }
 
-export default function PlanCard({ plan }: PlanCardProps) {
+export default function PlanCard({ plan, onDelete }: PlanCardProps) {
   return (
     <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50 overflow-hidden shadow-sm">
       <div className="p-5 border-b border-zinc-200 dark:border-zinc-700">
@@ -75,9 +76,22 @@ export default function PlanCard({ plan }: PlanCardProps) {
             <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{plan.subject}</h3>
             <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{plan.topics}</p>
           </div>
-          <span className="shrink-0 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium">
-            {plan.days_until_exam} days
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium">
+              {plan.days_until_exam} days
+            </span>
+            {onDelete && (
+              <button
+                onClick={onDelete}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                title="Delete plan"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex gap-4 mt-3 text-sm text-zinc-500 dark:text-zinc-400">
           <span>Exam: {plan.exam_date}</span>

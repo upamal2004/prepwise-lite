@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getSupabaseClient } from "@/lib/supabase";
 import type { StudyPlan, DayPlan } from "@/lib/types";
 
 function buildPrompt(subject: string, topics: string, examDate: string, hoursPerDay: number, daysUntilExam: number): string {
@@ -103,14 +102,6 @@ export async function POST(request: Request) {
       days_until_exam: daysUntilExam,
       schedule,
     };
-
-    const { error: dbError } = await getSupabaseClient()
-      .from("plans")
-      .insert(plan as any);
-
-    if (dbError) {
-      console.error("Supabase insert error:", dbError);
-    }
 
     return NextResponse.json({ plan }, { status: 201 });
   } catch (err) {
