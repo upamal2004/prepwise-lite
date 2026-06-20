@@ -1,9 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { StudyPlan } from "@/lib/types";
-
-const STORAGE_KEY = "prepwise-study-plans";
 
 interface StudyFormProps {
   onPlanGenerated?: () => void;
@@ -32,15 +29,6 @@ export default function StudyForm({ onPlanGenerated }: StudyFormProps) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to generate plan");
-      const savedPlan: StudyPlan = {
-        ...data.plan,
-        id: crypto.randomUUID(),
-        created_at: new Date().toISOString(),
-      };
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const existing: StudyPlan[] = raw ? JSON.parse(raw) : [];
-      existing.unshift(savedPlan);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
       setPlan(data.plan);
       setSubject("");
       setTopics("");

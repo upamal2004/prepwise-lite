@@ -67,7 +67,42 @@ function DayAccordion({ day }: { day: DayPlan }) {
   );
 }
 
+function WeekBlock({ week, days }: { week: number; days: DayPlan[] }) {
+  const firstDate = days[0]?.date ?? "";
+  const lastDate = days[days.length - 1]?.date ?? "";
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-3 mb-1">
+        <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-400 text-xs font-bold">
+          {week}
+        </span>
+        <p className="text-sm font-semibold text-white">Week {week}</p>
+        <span className="text-xs text-slate-500">
+          {firstDate} — {lastDate}
+        </span>
+      </div>
+      <div className="space-y-2 pl-3 border-l border-slate-800/60">
+        {days.map((day) => (
+          <DayAccordion key={day.day} day={day} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function PlanCard({ plan, onDelete }: PlanCardProps) {
+  const weeks = plan.schedule?.reduce<{ week: number; days: DayPlan[] }[]>((acc, day) => {
+    const weekNum = day.week || Math.ceil(day.day / 7);
+    const existing = acc.find((w) => w.week === weekNum);
+    if (existing) {
+      existing.days.push(day);
+    } else {
+      acc.push({ week: weekNum, days: [day] });
+    }
+    return acc;
+  }, []);
+
   return (
     <div className="group rounded-2xl border border-slate-800 bg-[#161B26] overflow-hidden hover:border-slate-700 transition-all duration-300">
       <div className="p-5 border-b border-slate-800">
@@ -116,17 +151,17 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
           )}
         </div>
       </div>
-      {plan.schedule && plan.schedule.length > 0 && (
-        <div className="p-5 space-y-2">
-          <div className="flex items-center gap-2 mb-3">
+      {weeks && weeks.length > 0 && (
+        <div className="p-5 space-y-5">
+          <div className="flex items-center gap-2">
             <div className="h-px flex-1 bg-gradient-to-r from-blue-500/20 to-transparent" />
             <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">
-              Study Schedule
+              Study Roadmap
             </p>
             <div className="h-px flex-1 bg-gradient-to-l from-blue-500/20 to-transparent" />
           </div>
-          {plan.schedule.map((day) => (
-            <DayAccordion key={day.day} day={day} />
+          {weeks.map((w) => (
+            <WeekBlock key={w.week} week={w.week} days={w.days} />
           ))}
         </div>
       )}

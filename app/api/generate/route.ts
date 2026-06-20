@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
+import { getSupabaseClient } from "@/lib/supabase";
 import type { StudyPlan, DayPlan } from "@/lib/types";
 
 function buildPrompt(subject: string, topics: string, examDate: string, hoursPerDay: number, daysUntilExam: number): string {
-  return `You are an expert study planner. Generate a detailed day-by-day study plan.
+  const today = new Date();
+  const startDateStr = today.toISOString().split("T")[0];
+
+  return `You are an expert study planner. Generate a professional, day-by-day study roadmap.
 
 Subject: ${subject}
 Topics to cover: ${topics}
 Exam Date: ${examDate}
 Days until exam: ${daysUntilExam}
 Hours available per day: ${hoursPerDay}
+Start date: ${startDateStr}
 
-Create a realistic, structured plan that covers all topics by the exam date. Return ONLY a raw JSON array (no markdown, no code fences) of day objects:
+Structure the plan into weekly blocks. Each week should have a clear theme or milestone. Return ONLY a raw JSON array (no markdown, no code fences) of day objects:
 
 [
   {
@@ -19,11 +24,18 @@ Create a realistic, structured plan that covers all topics by the exam date. Ret
     "focus_area": "Main topic for the day",
     "topics_to_cover": ["specific subtopic 1", "specific subtopic 2"],
     "activities": ["Review concept X for 1 hour", "Practice problems on Y for 1.5 hours", "Take a quiz on Z for 30 minutes"],
-    "estimated_hours": 4
+    "estimated_hours": 4,
+    "week": 1
   }
 ]
 
-Each day should have 2-5 specific topics and 2-4 concrete activities. The plan must span from today to the day before the exam.`;
+Rules:
+- "day" starts at 1 and increments by 1 for each consecutive day.
+- "date" must be a real calendar date starting from ${startDateStr}.
+- "estimated_hours" must not exceed ${hoursPerDay}.
+- "week" is the week number (1, 2, 3, ...). Group roughly 7 days per week.
+- Each day must have 2-5 specific topics and 2-4 concrete, actionable activities.
+- The plan must cover all topics by the day before the exam.`;
 }
 
 export async function POST(request: Request) {
@@ -63,7 +75,7 @@ export async function POST(request: Request) {
         model: "llama-3.1-8b-instant",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
-        max_tokens: 4096,
+        max_tokens: 8192,
       }),
     });
 
@@ -102,6 +114,14 @@ export async function POST(request: Request) {
       days_until_exam: daysUntilExam,
       schedule,
     };
+
+    const { error: dbError } = await getSupabaseClient()
+      .from("plans")
+      .insert(plan as any);
+
+    if (dbError) {
+      console.error("Supabase insert error:", dbError);
+    }
 
     return NextResponse.json({ plan }, { status: 201 });
   } catch (err) {

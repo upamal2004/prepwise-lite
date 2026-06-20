@@ -1,37 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import PlanCard from "@/components/PlanCard";
+import { getSupabaseClient } from "@/lib/supabase";
 import type { StudyPlan } from "@/lib/types";
-
-const STORAGE_KEY = "prepwise-study-plans";
 
 export default function PlansPage() {
   const [plans, setPlans] = useState<StudyPlan[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchPlans = useCallback(async () => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed: StudyPlan[] = JSON.parse(raw);
-        parsed.sort(
-          (a, b) =>
-            new Date(b.created_at!).getTime() -
-            new Date(a.created_at!).getTime()
-        );
-        setPlans(parsed);
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from("plans")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching plans:", error);
+      } else {
+        setPlans(data as unknown as StudyPlan[]);
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error("Supabase error:", err);
     }
     setLoading(false);
   }, []);
 
-  const handleDelete = (id: string) => {
-    const updated = plans.filter((p) => p.id !== id);
-    setPlans(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  useEffect(() => {
+    fetchPlans();
+  }, [fetchPlans]);
+
+  const handleDelete = async (id: string) => {
+    try {
+      const supabase = getSupabaseClient();
+      await supabase.from("plans").delete().eq("id", id);
+      setPlans((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   return (

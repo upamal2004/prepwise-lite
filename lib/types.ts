@@ -5,6 +5,7 @@ export interface DayPlan {
   topics_to_cover: string[];
   activities: string[];
   estimated_hours: number;
+  week: number;
 }
 
 export interface StudyPlan {
