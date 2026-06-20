@@ -6,36 +6,35 @@ function buildPrompt(subject: string, topics: string, examDate: string, hoursPer
   const today = new Date();
   const startDateStr = today.toISOString().split("T")[0];
 
-  return `You are an expert study planner. Generate a professional, day-by-day study roadmap.
+  return `You are an expert study planner. Generate a day-by-day study roadmap as a raw JSON array (no markdown, no code fences).
 
 Subject: ${subject}
 Topics to cover: ${topics}
 Exam Date: ${examDate}
 Days until exam: ${daysUntilExam}
-Hours available per day: ${hoursPerDay}
+Hours per day: ${hoursPerDay}
 Start date: ${startDateStr}
 
-Structure the plan into weekly blocks. Each week should have a clear theme or milestone. Return ONLY a raw JSON array (no markdown, no code fences) of day objects:
-
+Format:
 [
   {
     "day": 1,
     "date": "YYYY-MM-DD",
-    "focus_area": "Main topic for the day",
-    "topics_to_cover": ["specific subtopic 1", "specific subtopic 2"],
-    "activities": ["Review concept X for 1 hour", "Practice problems on Y for 1.5 hours", "Take a quiz on Z for 30 minutes"],
+    "focus_area": "Main topic",
+    "topics_to_cover": ["subtopic 1", "subtopic 2"],
+    "activities": ["Action 1 with duration", "Action 2 with duration"],
     "estimated_hours": 4,
     "week": 1
   }
 ]
 
 Rules:
-- "day" starts at 1 and increments by 1 for each consecutive day.
-- "date" must be a real calendar date starting from ${startDateStr}.
-- "estimated_hours" must not exceed ${hoursPerDay}.
-- "week" is the week number (1, 2, 3, ...). Group roughly 7 days per week.
-- Each day must have 2-5 specific topics and 2-4 concrete, actionable activities.
-- The plan must cover all topics by the day before the exam.`;
+- day starts at 1, increments by 1 each consecutive day
+- date starts at ${startDateStr}, must be real calendar dates
+- estimated_hours ≤ ${hoursPerDay}
+- week = week number (1, 2, 3...), ~7 days per week
+- each day: 2-5 topics, 2-4 concrete activities
+- cover all topics by the day before the exam`;
 }
 
 export async function POST(request: Request) {
@@ -72,7 +71,7 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: "llama3-70b-8192",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         max_tokens: 8192,
