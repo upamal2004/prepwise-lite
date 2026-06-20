@@ -35,7 +35,11 @@ export default function PlansPage() {
   const handleDelete = async (id: string) => {
     try {
       const supabase = getSupabaseClient();
-      await supabase.from("plans").delete().eq("id", id);
+      const { error } = await supabase.from("plans").delete().eq("id", id);
+      if (error) {
+        console.error("Supabase delete error:", error);
+        return;
+      }
       setPlans((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       console.error("Delete error:", err);
@@ -50,7 +54,11 @@ export default function PlansPage() {
     if (!confirmed) return;
     try {
       const supabase = getSupabaseClient();
-      await supabase.from("plans").delete().not("id", "is", null);
+      const { error } = await supabase.from("plans").delete().not("id", "is", null);
+      if (error) {
+        console.error("Supabase clear-all error:", error);
+        return;
+      }
       setPlans([]);
     } catch (err) {
       console.error("Clear all error:", err);
